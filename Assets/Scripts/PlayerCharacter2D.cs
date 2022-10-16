@@ -19,7 +19,7 @@ public class PlayerCharacter2D : CharacterController2D
 
     void Start()
     {
-        rigidbody2D = GetComponentInChildren<Rigidbody2D>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
