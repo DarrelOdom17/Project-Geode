@@ -15,7 +15,7 @@ public class PlayerCharacter2D : CharacterController2D
     private Rigidbody2D rigidbody2D;
     private float jumpInputLastFrame = 0.0f;
 
-    public bool isTouchingGround = false;
+    //public bool isTouchingGround = false;
 
     void Start()
     {
