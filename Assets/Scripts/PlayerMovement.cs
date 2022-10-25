@@ -98,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
 
             jumpCounter++;
             jumpsLeft--;
-            //currentJumpTime += Time.deltaTime;
+            currentJumpTime += Time.deltaTime;
         }
 
         if (Input.GetButton("Jump"))
@@ -123,6 +123,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (jumpReleased && rb.velocity.y > 0)
         {
+            currentJumpTime = 0f;
             rb.velocity = new Vector2(rb.velocity.x, 0);
         }
         
