@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Variables")]
     [SerializeField] private float maxMoveSpeed = 10f;
-    [SerializeField] private int jumpsLeft = 2;
     private float moveDirectionX;
     private float moveDirectionY;
 
@@ -18,31 +17,46 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float fallSpeed = 5f;
     [SerializeField] private float fallMultiplier = 8f;
     [SerializeField] private float lowJumpFallMultiplier = 5f;
-    public bool isGrounded = false;
-    public bool jumpReleased = false;
+    [SerializeField] private float maxJumpTime = 0.5f;
+    [SerializeField] private int jumpsLeft = 1;
+    private int jumpCounter = 0;
+    [SerializeField] private float currentJumpTime;
+
+    [Header("Layer Masks")]
+    [SerializeField] private LayerMask Ground;
+
+    [Header("Ground Collison Variables")]
+    [SerializeField] private float groundRayLength;
+    public bool isGrounded;
+    public bool jumpReleased;
+    private bool isJumping;
 
 
-
-    
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     
     void Update()
     {
         moveDirectionX = GetInput().x;
-        MoveCharacter(); 
-        //PlayerFall();
-        Jump();
-
-        isGrounded = GroundCheck();
         jumpReleased = Input.GetButtonUp("Jump");
+        Jump();
     }
 
     private void FixedUpdate()
     {
+        isGrounded = GroundCheck();
+        if (isGrounded == true)
+        {
+            jumpsLeft = 1;
+            jumpCounter = 0;
+            currentJumpTime = 0f;
+            maxJumpTime = 0.35f;
+        }
+
+        MoveCharacter();
         PlayerFall();
     }
 
@@ -65,28 +79,45 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
+            isJumping = false;
             Vector2 newVelocity;
             newVelocity.x = rb.velocity.x;
             newVelocity.y = jumpForce;
-
             rb.velocity = newVelocity;
-            jumpsLeft -= 1;
+        }
 
-            if (Input.GetButtonDown("Jump") && jumpsLeft > 0)
+        if (Input.GetButtonDown("Jump") && !isGrounded && jumpsLeft > 0)
+        {
+            isJumping = true;
+            Vector2 newVelocity;
+            newVelocity.x = rb.velocity.x;
+            newVelocity.y = jumpForce;
+            rb.velocity = newVelocity;
+
+            jumpCounter++;
+            jumpsLeft--;
+            //currentJumpTime += Time.deltaTime;
+        }
+
+        if (Input.GetButton("Jump"))
+        {
+            currentJumpTime += Time.deltaTime;
+
+            if (currentJumpTime < maxJumpTime)
             {
+                Vector2 newVelocity;
                 newVelocity.x = rb.velocity.x;
                 newVelocity.y = jumpForce;
-
                 rb.velocity = newVelocity;
-                jumpsLeft -= 1;
             }
 
-            if (Input.GetButtonDown("Jump") && jumpsLeft == 0)
+            else if (currentJumpTime >= maxJumpTime && rb.velocity.y > 0)
             {
-                //PlayerFall();
-                jumpsLeft = 2;
+                //rb.gravityScale = fallMultiplier;
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                //isJumping = true;
             }
         }
 
@@ -94,27 +125,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, 0);
         }
-
-      jumpsLeft = 2;
-    }
-
-    public bool GroundCheck()
-    {
-        Vector2 origin = transform.position;
         
-        float radius = 0.2f;
-
-        // detect downwards
-        Vector2 direction;
-        direction.x = 0;
-        direction.y = -1;
-
-        float distance = 0.5f;
-        LayerMask layerMask = LayerMask.GetMask("Ground");
-
-        RaycastHit2D hitRec = Physics2D.CircleCast(origin, radius, direction, distance, layerMask);
-
-        return hitRec.collider != null;
     }
 
     private void PlayerFall()
@@ -133,35 +144,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
-
-
-    // Old jump code
-
-   /* private void Jump()
+    public bool GroundCheck()
     {
-        Vector2 newVelocity;
-        newVelocity.x = rb.velocity.x;
-        newVelocity.y = jumpSpeed;
+        LayerMask Ground = LayerMask.GetMask("Ground");
+        RaycastHit2D hitRec = Physics2D.Raycast(transform.position * groundRayLength, Vector2.down, groundRayLength, Ground);
 
-        rb.velocity = newVelocity;
-
-        jumpsLeft -= 1;
-
-        if (!Input.GetButtonDown("Jump"))
-            return;
-
-        else if (Input.GetButtonDown("Jump") && jumpsLeft == 1)
-        {
-            //Jump();
-            //animator.SetTrigger("IsJumpFirst");
-            isGrounded = true;
-        }
-
-        else if (Input.GetButtonUp("Jump") && jumpsLeft <= 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-        }
+        return hitRec.collider != null;
     }
-   */
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundRayLength);
+    }
 }
