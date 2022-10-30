@@ -1239,6 +1239,10 @@ PrefabInstance:
       propertyPath: dashSpeed
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
+      propertyPath: dashCooldown
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5865851114637423878, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
       propertyPath: m_RootOrder
       value: 1

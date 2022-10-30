@@ -27,7 +27,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Dash Variables")]
     [SerializeField] private float dashTime;
-    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashCooldown;
     private Vector2 dashingDir;
     private bool isDashing;
     private bool canDash = true;
@@ -179,6 +180,7 @@ public class PlayerMovement : MonoBehaviour
         if (dashInput && canDash)
         {
             rb.gravityScale = 0f;
+            maxMoveSpeed = dashSpeed;
             isDashing = true;
             canDash = false;
             trailRenderer.emitting = true;
@@ -194,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isDashing)
         {
-            rb.velocity = dashingDir * dashSpeed;
+            rb.velocity = dashingDir.normalized * dashSpeed;
             return;
         }
 
@@ -218,9 +220,15 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashTime);
         trailRenderer.emitting = false;
         isDashing = false;
-        
-        if (isDashing == false)
-            maxMoveSpeed = originalMoveSpeed;
+        maxMoveSpeed = originalMoveSpeed;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+    }
+
+    private IEnumerator DashCooldown()
+    {
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 
     private void OnDrawGizmos()
