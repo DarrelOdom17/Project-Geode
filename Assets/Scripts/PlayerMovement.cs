@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Ground Collison Variables")]
     [SerializeField] private float groundRayLength;
-    public bool isGrounded;
+    public bool isGrounded = false;
     public bool jumpReleased;
     private bool dashInput;
     private bool isJumping;
@@ -70,9 +70,9 @@ public class PlayerMovement : MonoBehaviour
             jumpsLeft = 1;
             jumpCounter = 0;
             currentJumpTime = 0f;
-            maxJumpTime = 0.35f;
-            canDash = true;
+            maxJumpTime = 0.4f;
         }
+        
 
         MoveCharacter();
         PlayerFall();
@@ -110,7 +110,6 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
             isJumping = true;
-            //currentJumpTime = 0f;
             Vector2 newVelocity;
             newVelocity.x = rb.velocity.x;
             newVelocity.y = jumpForce;
@@ -222,7 +221,6 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
         maxMoveSpeed = originalMoveSpeed;
         yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
     }
 
     private IEnumerator DashCooldown()

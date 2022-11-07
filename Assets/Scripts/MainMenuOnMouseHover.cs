@@ -22,7 +22,7 @@ public class MainMenuOnMouseHover : MonoBehaviour, IPointerExitHandler, IPointer
     {
         bracket.SetActive(true);
         Debug.Log("Mouse hovering");
-        bracket.SetActive(true);
+        //bracket.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)

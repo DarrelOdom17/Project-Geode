@@ -5,6 +5,11 @@ using UnityEngine.Audio;
 
 public class OptionsMenu : MonoBehaviour
 {
+    private GameObject audioManager;
+    private void Start()
+    {
+        audioManager = GameObject.Find("AudioManager");
+    }
     public AudioMixer audiomixer;
 
     public void SetVolume(float volume)
