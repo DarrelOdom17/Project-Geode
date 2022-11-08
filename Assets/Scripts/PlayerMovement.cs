@@ -208,10 +208,16 @@ public class PlayerMovement : MonoBehaviour
 
     public bool GroundCheck()
     {
+        Vector2 position = transform.position;
+        Vector2 direction = Vector2.down;
         LayerMask Ground = LayerMask.GetMask("Ground");
-        RaycastHit2D hitRec = Physics2D.Raycast(transform.position * groundRayLength, Vector2.down, groundRayLength, Ground);
+        RaycastHit2D hit = Physics2D.Raycast(position * groundRayLength, direction, groundRayLength, Ground);
 
-        return hitRec.collider != null;
+        if (hit.collider != null)
+        {
+            return true;
+        }
+        return false;
     }
 
     private IEnumerator StopDashing()
