@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private float moveDirectionY;
 
     [Header("Jump Variables")]
+    [SerializeField] private float testFloat = 10f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float fallSpeed = 5f;
     [SerializeField] private float fallMultiplier = 8f;
