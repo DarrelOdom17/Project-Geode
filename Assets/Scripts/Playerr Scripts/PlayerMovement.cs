@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
     private float moveDirectionY;
 
     [Header("Jump Variables")]
-    [SerializeField] private float testFloat = 10f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float fallSpeed = 5f;
     [SerializeField] private float fallMultiplier = 8f;
@@ -30,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashTime;
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashCooldown;
+    [SerializeField] private float verticalDashGravity;
     private Vector2 dashingDir;
     private bool isDashing;
     private bool canDash = true;
@@ -91,11 +91,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (moveDirectionX > 0)
         {
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            transform.eulerAngles = new Vector3(0, 180, 0);
         }
         else if (moveDirectionX < 0)
         {
-            transform.eulerAngles = new Vector3(0, 180, 0);
+            transform.eulerAngles = new Vector3(0, 0, 0);
         }
             
         // Velocity Settings
@@ -166,6 +166,10 @@ public class PlayerMovement : MonoBehaviour
         else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
         {
             rb.gravityScale = lowJumpFallMultiplier;
+            if (isDashing && rb.velocity.y > 0 && Input.GetButtonDown("Dash"))
+            {
+                rb.gravityScale = verticalDashGravity;
+            }
         }
         else
         {
@@ -189,6 +193,12 @@ public class PlayerMovement : MonoBehaviour
             if (dashingDir == Vector2.zero)
             {
                 dashingDir = new Vector2(moveDirectionX, 0);
+            }
+            
+            if (dashingDir == Vector2.up)
+            {
+                dashingDir = new Vector2(0, moveDirectionY);
+                rb.gravityScale = verticalDashGravity;
             }
 
             StartCoroutine(StopDashing());

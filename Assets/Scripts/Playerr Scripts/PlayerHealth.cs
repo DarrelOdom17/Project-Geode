@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Variables")]
-    [SerializeField] private bool damageable = true;
+    //[SerializeField] private bool damageable = true;
     [SerializeField] public int currentHealthAmount;
     [SerializeField] public int maxHealthAmount;
     [SerializeField] private int numOfHearts;
+    [SerializeField] private float invincibilityTime;
+    [SerializeField] private bool isInvincible = false;
 
     public Image[] hearts;
     public Sprite fullHeart;
@@ -64,23 +66,43 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        if (damageable && currentHealthAmount > 0)
+        if (!isInvincible && currentHealthAmount > 0)
             {
                 currentHealthAmount -= amount;
-                damageable = true;
                 Debug.Log("Damage being done!");
             }
         
-        else
+        if (currentHealthAmount <= 0)
         {
-            damageable = false;
             Die();
         }
 
+        StartCoroutine(TempInvicibility());
     }
 
+    private IEnumerator TempInvicibility()
+    {
+        Debug.Log("Player turned invincible!");
+        isInvincible = true;
+
+        yield return new WaitForSeconds(invincibilityTime);
+
+        isInvincible = false;
+        Debug.Log("Player is no longer invincible!");
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Debug.Log("Collision detected!");
+            TakeDamage(1);
+        }
+    }
     public void Die()
     {
-        Destroy(this.gameObject);
+        // Add animator stuff here
+        //Destroy(this.gameObject);
+        gameObject.SetActive(false);
     }
 }

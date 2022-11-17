@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    [Header("Health Variables")]
+    [SerializeField] private bool damageable = true;
     public int maxHealth;
     public int currentHealthAmount;
 
@@ -20,5 +22,26 @@ public class EnemyHealth : MonoBehaviour
     void Update()
     {
         
+    }
+
+     public void TakeDamage(int amount)
+    {
+        if (damageable && currentHealthAmount > 0)
+            {
+                currentHealthAmount -= amount;
+                Debug.Log("Damage being done!");
+            }
+        
+        else
+        {
+            damageable = false;
+            Die();
+        }
+    }
+
+   public void Die()
+    {
+        // Add animator stuff here
+        Destroy(this.gameObject);
     }
 }
