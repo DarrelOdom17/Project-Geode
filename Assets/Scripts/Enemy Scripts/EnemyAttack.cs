@@ -27,7 +27,7 @@ public class EnemyAttack : MonoBehaviour
         timer += Time.deltaTime;
     }
 
-    /*void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (timer >= timeBetweenAttacks && playerHealth.currentHealthAmount > 0)
         {
@@ -35,7 +35,6 @@ public class EnemyAttack : MonoBehaviour
             Attack();
         }
     }
-    */
 
     void Attack()
     {
@@ -46,14 +45,6 @@ public class EnemyAttack : MonoBehaviour
             {
                 playerHealth.TakeDamage(attackDamage);
             }
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.tag == "Enemy")
-        {
-            TakeDamage(1);
         }
     }
 }
