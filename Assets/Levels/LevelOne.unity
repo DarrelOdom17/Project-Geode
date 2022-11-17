@@ -1197,7 +1197,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000847994}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f92b3d264d7fbb4fbeff9f0c52b2d66, type: 3}
   m_Name: 
@@ -1464,7 +1464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7732a45ce53d5ae428f43de50953ac99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealthAmount: 4
+  currentHealthAmount: 6
   maxHealthAmount: 6
   numOfHearts: 6
   invincibilityTime: 0.2

@@ -28,6 +28,27 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            TakeDamage(1);
+        }
+    }
+
+    public void TakeDamage(int amount)
+    {
+        if (!isInvincible && currentHealthAmount > 0)
+            {
+                currentHealthAmount -= amount;
+                Debug.Log("Damage being done!");
+
+                StartCoroutine(TempInvicibility());
+            }
+        
+        if (currentHealthAmount <= 0)
+        {
+            Die();
+        }
+
         if (currentHealthAmount > numOfHearts)
         {
             currentHealthAmount = numOfHearts;   
@@ -41,7 +62,6 @@ public class PlayerHealth : MonoBehaviour
                 hearts[i].sprite = fullHeart;
                 hearts[i].enabled = true;
             }
-
             else
             {
                 hearts[i].sprite = emptyHeart;
@@ -57,27 +77,6 @@ public class PlayerHealth : MonoBehaviour
                 hearts[i].enabled = false;
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            TakeDamage(1);
-        }
-    }
-
-    public void TakeDamage(int amount)
-    {
-        if (!isInvincible && currentHealthAmount > 0)
-            {
-                currentHealthAmount -= amount;
-                Debug.Log("Damage being done!");
-            }
-        
-        if (currentHealthAmount <= 0)
-        {
-            Die();
-        }
-
-        StartCoroutine(TempInvicibility());
     }
 
     private IEnumerator TempInvicibility()
