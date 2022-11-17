@@ -5,14 +5,20 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
+<<<<<<< Updated upstream:Assets/Scripts/Playerr Scripts/PlayerHealth.cs
     [Header("Health Variables")]
     //[SerializeField] private bool damageable = true;
+=======
+    [Header("Health Settings")]
+    [SerializeField] private bool damageable = true;
+>>>>>>> Stashed changes:Assets/Scripts/Player Scripts/PlayerHealth.cs
     [SerializeField] public int currentHealthAmount;
     [SerializeField] public int maxHealthAmount;
     [SerializeField] private int numOfHearts;
     [SerializeField] private float invincibilityTime;
     [SerializeField] private bool isInvincible = false;
 
+    [Header("Healthbar Settings")]
     public Image[] hearts;
     public Sprite fullHeart;
     public Sprite emptyHeart;
@@ -104,5 +110,13 @@ public class PlayerHealth : MonoBehaviour
         // Add animator stuff here
         //Destroy(this.gameObject);
         gameObject.SetActive(false);
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "Enemy")
+        {
+            TakeDamage(1);
+        }
     }
 }

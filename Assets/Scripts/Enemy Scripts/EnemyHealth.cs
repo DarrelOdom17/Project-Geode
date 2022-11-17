@@ -24,11 +24,12 @@ public class EnemyHealth : MonoBehaviour
         
     }
 
-     public void TakeDamage(int amount)
+    public void TakeDamage(int amount)
     {
         if (damageable && currentHealthAmount > 0)
             {
                 currentHealthAmount -= amount;
+                damageable = true;
                 Debug.Log("Damage being done!");
             }
         
@@ -37,11 +38,19 @@ public class EnemyHealth : MonoBehaviour
             damageable = false;
             Die();
         }
+
     }
 
-   public void Die()
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        // Add animator stuff here
+        if (collider.gameObject.tag == "Player")
+        {
+            TakeDamage(1);
+        }
+    }
+
+    public void Die()
+    {
         Destroy(this.gameObject);
     }
 }
