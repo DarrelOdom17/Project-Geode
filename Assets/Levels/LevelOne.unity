@@ -222,7 +222,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
       propertyPath: dashTime
-      value: 0.2
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
       propertyPath: dashSpeed
@@ -241,12 +241,24 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
+      propertyPath: knockBackForce
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
+      propertyPath: knockFromRight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
+      propertyPath: knockBackCounter
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
       propertyPath: verticalDashGravity
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
       propertyPath: lowJumpFallMultiplier
-      value: 20
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5865851114637423878, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
       propertyPath: m_RootOrder
@@ -1088,8 +1100,9 @@ GameObject:
   - component: {fileID: 1000847997}
   - component: {fileID: 1000847996}
   - component: {fileID: 1000847995}
-  - component: {fileID: 1000847998}
   - component: {fileID: 1000847999}
+  - component: {fileID: 1000848000}
+  - component: {fileID: 1000848001}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -1110,7 +1123,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.00000023841858, y: 0.05940175}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1121,7 +1134,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.5, y: 1.5}
   m_EdgeRadius: 0
 --- !u!212 &1000847996
 SpriteRenderer:
@@ -1190,20 +1203,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1000847998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000847994}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f92b3d264d7fbb4fbeff9f0c52b2d66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeBetweenAttacks: 0.5
-  attackDamage: 1
 --- !u!114 &1000847999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1219,6 +1218,47 @@ MonoBehaviour:
   damageable: 1
   maxHealth: 1
   currentHealthAmount: 1
+--- !u!61 &1000848000
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000847994}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &1000848001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000847994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f92b3d264d7fbb4fbeff9f0c52b2d66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBetweenAttacks: 0
+  attackDamage: 1
+  playerMovement: {fileID: 1780121777}
 --- !u!114 &1049900952 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1049900952, guid: 6826c078bd86cbf4a81af596782c85e1, type: 3}
@@ -1478,6 +1518,17 @@ MonoBehaviour:
   - {fileID: 1049900952}
   fullHeart: {fileID: 21300000, guid: 957688f356fa92948b64ec7fd9eaf773, type: 3}
   emptyHeart: {fileID: 21300000, guid: 41050be20a4de5f479e941b9c572c507, type: 3}
+--- !u!114 &1780121777 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5865851114637423877, guid: bca52642583106f4c9b2f8482ae07ff3, type: 3}
+  m_PrefabInstance: {fileID: 275268900}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780121768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3677b832061806418f1deab4e080b45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1795041793
 PrefabInstance:
   m_ObjectHideFlags: 0

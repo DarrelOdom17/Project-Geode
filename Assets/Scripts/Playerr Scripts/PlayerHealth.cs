@@ -13,14 +13,20 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float invincibilityTime;
     [SerializeField] private bool isInvincible = false;
 
+
+    [Header("Collision Variables")]
+
     public Image[] hearts;
     public Sprite fullHeart;
     public Sprite emptyHeart;
+    private Rigidbody2D rb;
 
-    //private ApplyDamage amount;
+
+    // private ApplyDamage amount;
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         currentHealthAmount = maxHealthAmount;
         //amount = GetComponent<ApplyDamage>().damageAmount;
     }
@@ -28,10 +34,7 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            TakeDamage(1);
-        }
+       
     }
 
     public void TakeDamage(int amount)
@@ -39,13 +42,13 @@ public class PlayerHealth : MonoBehaviour
         if (!isInvincible && currentHealthAmount > 0)
             {
                 currentHealthAmount -= amount;
-                Debug.Log("Damage being done!");
-
                 StartCoroutine(TempInvicibility());
+                Debug.Log("Damage being done!");
             }
         
         if (currentHealthAmount <= 0)
         {
+            currentHealthAmount = 0;
             Die();
         }
 
@@ -62,6 +65,7 @@ public class PlayerHealth : MonoBehaviour
                 hearts[i].sprite = fullHeart;
                 hearts[i].enabled = true;
             }
+
             else
             {
                 hearts[i].sprite = emptyHeart;
@@ -76,6 +80,11 @@ public class PlayerHealth : MonoBehaviour
             {
                 hearts[i].enabled = false;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            TakeDamage(1);
         }
     }
 
@@ -96,8 +105,10 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.Log("Collision detected!");
             TakeDamage(1);
+            Debug.Log("KnockBack Reached!");
         }
     }
+    
     public void Die()
     {
         // Add animator stuff here

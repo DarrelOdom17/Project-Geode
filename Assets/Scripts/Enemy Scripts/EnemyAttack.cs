@@ -7,36 +7,43 @@ public class EnemyAttack : MonoBehaviour
     public float timeBetweenAttacks;
     public int attackDamage;
 
-    GameObject player;
-    PlayerHealth playerHealth;
-    EnemyHealth enemyHealth;
+    //public GameObject player;
+    //public PlayerHealth playerHealth;
+    //public EnemyHealth enemyHealth;
+
+   public PlayerMovement playerMovement;
 
     private float timer;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = GetComponent<PlayerHealth>();
-        enemyHealth = GetComponent<EnemyHealth>();
+        //player = GameObject.FindGameObjectWithTag("Player");
+        //playerHealth = GetComponent<PlayerHealth>();
+        //enemyHealth = GetComponent<EnemyHealth>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        timer += Time.deltaTime;
-    }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisonEnter2D(Collision2D collison)
     {
-        if (timer >= timeBetweenAttacks && playerHealth.currentHealthAmount > 0)
+        if (collison.gameObject.tag == "Player")
         {
-            Debug.Log("Collider working");
-            Attack();
+            playerMovement.knockBackCounter = playerMovement.knockBackTotalTime;
+            if (collison.transform.position.x <= transform.position.x)
+            {
+                playerMovement.knockFromRight = true;
+            }
+            if (collison.transform.position.x > transform.position.x)
+            {
+                playerMovement.knockFromRight = false;
+            }
+            Debug.Log("KnockBack Detected");
+            //playerHealth.TakeDamage(attackDamage);
         }
     }
 
-    void Attack()
+   /* void Attack()
     {
         timer = 0f;
         if (playerHealth.currentHealthAmount > 0)
@@ -47,4 +54,7 @@ public class EnemyAttack : MonoBehaviour
             }
         }
     }
+    */
+
+    
 }

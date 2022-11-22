@@ -34,6 +34,15 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing;
     private bool canDash = true;
 
+    [Header("KnockBack Variables")]
+    [SerializeField] public float knockBackForce;
+    [SerializeField] public float knockBackCounter;
+    [SerializeField] public float knockBackTotalTime;
+    [SerializeField] public bool knockFromRight;
+
+
+
+
     [Header("Layer Masks")]
     [SerializeField] private LayerMask Ground;
 
@@ -87,25 +96,40 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveCharacter()
     {
-        float moveDirectionX = Input.GetAxisRaw("Horizontal") * maxMoveSpeed;
+        if (knockBackCounter <= 0)
+        {
+            float moveDirectionX = Input.GetAxisRaw("Horizontal") * maxMoveSpeed;
 
-        if (moveDirectionX > 0)
-        {
-            transform.eulerAngles = new Vector3(0, 180, 0);
-        }
-        else if (moveDirectionX < 0)
-        {
-            transform.eulerAngles = new Vector3(0, 0, 0);
-        }
+            if (moveDirectionX > 0)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else if (moveDirectionX < 0)
+            {
+                transform.eulerAngles = new Vector3(0, 180, 0);
+            }
             
-        // Velocity Settings
-        Vector2 newVelocity;
+            // Velocity Settings
+            Vector2 newVelocity;
 
-        newVelocity.x = moveDirectionX;
-        newVelocity.y = rb.velocity.y;
-        rb.velocity = newVelocity;
+            newVelocity.x = moveDirectionX;
+            newVelocity.y = rb.velocity.y;
+            rb.velocity = newVelocity;
+        }
+        else
+        {
+            if (knockFromRight == true)
+            {
+                rb.velocity = new Vector2(-knockBackForce, knockBackForce);
+            }
+            if (knockFromRight == false)
+            {
+                rb.velocity = new Vector2(knockBackForce, knockBackForce);
+            }
+
+            knockBackCounter -= Time.deltaTime;
+        }
     }
-
     private void Jump()
     {
         if (Input.GetButtonDown("Jump") && isGrounded == true)
