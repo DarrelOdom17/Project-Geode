@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Components")]
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private TrailRenderer trailRenderer;
     private Animator animator;
 
@@ -75,18 +75,8 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         isGrounded = GroundCheck();
-        if (isGrounded == true)
-        {
-            jumpsLeft = 1;
-            jumpCounter = 0;
-            currentJumpTime = 0f;
-            maxJumpTime = 0.4f;
-        }
-        
-
         MoveCharacter();
         PlayerFall();
-        
     }
 
     private Vector2 GetInput()
@@ -99,14 +89,15 @@ public class PlayerMovement : MonoBehaviour
         if (knockBackCounter <= 0)
         {
             float moveDirectionX = Input.GetAxisRaw("Horizontal") * maxMoveSpeed;
+            knockBackCounter = 0;
 
             if (moveDirectionX > 0)
             {
-                transform.eulerAngles = new Vector3(0, 0, 0);
+                transform.eulerAngles = new Vector2(0, 0);
             }
             else if (moveDirectionX < 0)
             {
-                transform.eulerAngles = new Vector3(0, 180, 0);
+                transform.eulerAngles = new Vector2(0, 180);
             }
             
             // Velocity Settings
@@ -126,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.velocity = new Vector2(knockBackForce, knockBackForce);
             }
+            Debug.Log("Checked");
 
             knockBackCounter -= Time.deltaTime;
         }
@@ -250,8 +242,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (hit.collider != null)
         {
+            jumpsLeft = 1;
+            jumpCounter = 0;
+            currentJumpTime = 0f;
+            maxJumpTime = 0.4f;
+
             return true;
         }
+        
         return false;
     }
 

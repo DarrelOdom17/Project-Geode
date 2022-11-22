@@ -12,8 +12,7 @@ public class EnemyAttack : MonoBehaviour
     //public EnemyHealth enemyHealth;
 
    public PlayerMovement playerMovement;
-
-    private float timer;
+   private float timer;
 
     // Start is called before the first frame update
     void Start()
@@ -25,16 +24,16 @@ public class EnemyAttack : MonoBehaviour
 
     // Update is called once per frame
 
-    private void OnCollisonEnter2D(Collision2D collison)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collison.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player")
         {
             playerMovement.knockBackCounter = playerMovement.knockBackTotalTime;
-            if (collison.transform.position.x <= transform.position.x)
+            if (collider.transform.position.x <= transform.position.x)
             {
                 playerMovement.knockFromRight = true;
             }
-            if (collison.transform.position.x > transform.position.x)
+            else
             {
                 playerMovement.knockFromRight = false;
             }

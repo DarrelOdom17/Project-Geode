@@ -105,7 +105,7 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.Log("Collision detected!");
             TakeDamage(1);
-            Debug.Log("KnockBack Reached!");
+            //Debug.Log("KnockBack Reached!");
         }
     }
     
