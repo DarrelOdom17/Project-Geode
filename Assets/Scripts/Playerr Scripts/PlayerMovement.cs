@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Components")]
     public Rigidbody2D rb;
     private TrailRenderer trailRenderer;
-    private Animator animator;
+    public Animator animator;
 
     [Header("Movement Variables")]
     [SerializeField] private float maxMoveSpeed = 10f;
@@ -41,8 +41,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public bool knockFromRight;
 
 
-
-
     [Header("Layer Masks")]
     [SerializeField] private LayerMask Ground;
 
@@ -58,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         trailRenderer = GetComponent<TrailRenderer>();
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     
@@ -81,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 GetInput()
     {
-        return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        return new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
 
     private void MoveCharacter()
@@ -90,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
         {
             float moveDirectionX = Input.GetAxisRaw("Horizontal") * maxMoveSpeed;
             knockBackCounter = 0;
+            animator.SetFloat("Speed", Mathf.Abs(moveDirectionX));
 
             if (moveDirectionX > 0)
             {
@@ -111,11 +110,11 @@ public class PlayerMovement : MonoBehaviour
         {
             if (knockFromRight == true)
             {
-                rb.velocity = new Vector2(-knockBackForce, knockBackForce);
+                rb.velocity = new Vector3(-knockBackForce, knockBackForce);
             }
             if (knockFromRight == false)
             {
-                rb.velocity = new Vector2(knockBackForce, knockBackForce);
+                rb.velocity = new Vector3(knockBackForce, knockBackForce);
             }
             Debug.Log("Checked");
 
@@ -131,11 +130,13 @@ public class PlayerMovement : MonoBehaviour
             newVelocity.x = rb.velocity.x;
             newVelocity.y = jumpForce;
             rb.velocity = newVelocity;
+            animator.SetBool("isJumping", true);
         }
 
         if (Input.GetButtonDown("Jump") && !isGrounded && jumpsLeft > 0)
         {
             isJumping = true;
+            animator.SetBool("isJumping", true);
             Vector2 newVelocity;
             newVelocity.x = rb.velocity.x;
             newVelocity.y = jumpForce;
@@ -160,6 +161,7 @@ public class PlayerMovement : MonoBehaviour
             else if (currentJumpTime >= maxJumpTime)
             {
                 rb.velocity = new Vector2(rb.velocity.x, 0);
+                animator.SetBool("isJumping", false);
                 isJumping = false;
             }
         }
@@ -169,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
             jumpReleased = true;
             isJumping = false;
             rb.velocity = new Vector2(rb.velocity.x, 0);
+            animator.SetBool("isJumping", false);
         }
         
     }
@@ -205,6 +208,7 @@ public class PlayerMovement : MonoBehaviour
             canDash = false;
             trailRenderer.emitting = true;
             dashingDir = GetInput();
+            animator.SetBool("isDashing", true);
         
             if (dashingDir == Vector2.zero)
             {
@@ -238,7 +242,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 position = transform.position;
         Vector2 direction = Vector2.down;
         LayerMask Ground = LayerMask.GetMask("Ground");
-        RaycastHit2D hit = Physics2D.Raycast(position * groundRayLength, direction, groundRayLength, Ground);
+        RaycastHit2D hit = Physics2D.Raycast(position, direction, groundRayLength, Ground);
 
         if (hit.collider != null)
         {
@@ -247,9 +251,12 @@ public class PlayerMovement : MonoBehaviour
             currentJumpTime = 0f;
             maxJumpTime = 0.4f;
 
+            //Debug.Log("Raycast hit " + hit.collider.tag);
+            animator.SetBool("isGrounded", true);
             return true;
         }
         
+        animator.SetBool("isGrounded", false);
         return false;
     }
 
@@ -258,6 +265,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashTime);
         trailRenderer.emitting = false;
         isDashing = false;
+        animator.SetBool("isDashing", false);
         maxMoveSpeed = originalMoveSpeed;
         yield return new WaitForSeconds(dashCooldown);
     }
